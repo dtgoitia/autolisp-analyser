@@ -63,28 +63,21 @@ func Chunk(s string) []string {
 				// fmt.Println("chunkArray:", chunkArray, "\n")
 			}
 		}
-
-		// remainingString := s[i:]
-		// remainingStringLength := utf8.RuneCountInString(remainingString)
-		// posibleDefunString := ""
-		// // fmt.Print("current character (" + strconv.Itoa(i) + ") : " + currentChar + "   remainingStringLength: " + strconv.Itoa(remainingStringLength))
-		// if remainingStringLength >= 7 {
-		// 	posibleDefunString = remainingString[0:7]
-		// 	// if posibleDefunString == "(defun " {
-		// 	// 	// fmt.Println("   !!!!  ")
-		// 	// 	fmt.Print("current character (" + strconv.Itoa(i) + ") : " + currentChar + "   remainingStringLength: " + strconv.Itoa(remainingStringLength))
-		// 	// 	fmt.Print("    posible: " + posibleDefunString)
-		// 	// }
-		// } else {
-		// 	posibleDefunString = ""
-		// }
-		// fmt.Println("chunkArray:", chunkArray)
 	}
-
 	return chunkArray
 }
 
-// CleanChunks : clean unnecessary content from s string
-func CleanChunks(s string) []string {
-	fmt.Println("s")
+// CleanChunks : keep only with "DT:*" or "defun" functions
+func CleanChunks(chunkArray []string) []string {
+	fmt.Println("Cleaning unnecesary functions...")
+	var newChunkArray []string
+	for _, x := range chunkArray {
+		if x[0:7] == "(defun " {
+			newChunkArray = append(newChunkArray, x)
+		}
+		if x[0:4] == "(DT:" {
+			newChunkArray = append(newChunkArray, x)
+		}
+	}
+	return newChunkArray
 }

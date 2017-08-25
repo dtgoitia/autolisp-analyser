@@ -7,4 +7,6 @@
   (defun function3name ( fun1arg ) function3Content )
   (defun function3name ( fun1arg ) function3Content )
 )
+(DT:James arg1 arg2)
+(DT:Bond arg1 arg2)
 (defun function4name ( fun1arg ) function4Content )

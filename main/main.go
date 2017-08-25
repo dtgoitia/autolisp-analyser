@@ -40,12 +40,12 @@ func main() {
 	for _, chunk := range chunksCleaned {
 		fmt.Println("  > Chunk:", chunk)
 	}
-	e := alisp.FuncDepen{
-		FunctionName: "name",
-		Dependencies: []string{"ing", "asd"},
-	}
-	fmt.Println("e:", e)
-	fmt.Println("e.FunctionName:", e.FunctionName)
-	fmt.Println("e.Dependencies:", e.Dependencies)
+	// e := alisp.FuncDepen{
+	// 	FunctionName: "name",
+	// 	Dependencies: []string{"ing", "asd"},
+	// }
+	// fmt.Println("e:", e)
+	// fmt.Println("e.FunctionName:", e.FunctionName)
+	// fmt.Println("e.Dependencies:", e.Dependencies)
 
 }
