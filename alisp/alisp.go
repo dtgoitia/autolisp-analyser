@@ -1,7 +1,6 @@
 package alisp
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -11,15 +10,21 @@ type FuncDepen struct {
 	Dependencies []string
 }
 
+// FileFuncDepen : depencency file struct
+type FileFuncDepen struct {
+	FilePath  string
+	Functions FuncDepen
+}
+
 // MinifyString : clean unnecessary content from s string
 func MinifyString(s string) string {
-	fmt.Println("Minifying string:")
+	// fmt.Println("Minifying string:")
 	replacer1 := strings.NewReplacer(
 		"\r\n", "", // remove newlines (in Windows is "\r\n", not "\n")
 		"  ", " ", // remove double spaces
 	)
-	fmt.Println("  > Removing \"\\n\"...")
-	fmt.Println("  > Removing double spaces...")
+	// fmt.Println("  > Removing \"\\n\"...")
+	// fmt.Println("  > Removing double spaces...")
 	newString := replacer1.Replace(s)
 
 	replacer2 := strings.NewReplacer(
@@ -31,7 +36,7 @@ func MinifyString(s string) string {
 		") ", ")", // remove spaces after ")"
 	)
 
-	fmt.Println("  > Removing spaces before and after \"(\" and \")\"...")
+	// fmt.Println("  > Removing spaces before and after \"(\" and \")\"...")
 	newString = replacer2.Replace(newString)
 	newString = replacer3.Replace(newString)
 
@@ -40,8 +45,6 @@ func MinifyString(s string) string {
 
 // Chunk : clean unnecessary content from s string
 func Chunk(s string) []string {
-	fmt.Println("Chunking string...")
-
 	// Run through every character within "s" string
 	startPoint := 0
 	currentNestedLevel := 0
@@ -69,7 +72,6 @@ func Chunk(s string) []string {
 
 // CleanChunks : keep only with "DT:*" or "defun" functions
 func CleanChunks(chunkArray []string) []string {
-	fmt.Println("Cleaning unnecesary functions...")
 	var newChunkArray []string
 	for _, x := range chunkArray {
 		if x[0:7] == "(defun " {

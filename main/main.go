@@ -26,19 +26,36 @@ func main() {
 	// fmt.Println("\fileContent:\n" + fileContent)
 
 	// Minify file string
+	fmt.Println("Minifying string...")
 	fileContentMinified := alisp.MinifyString(fileContent)
 	// fmt.Println("\nfileContentMinified:\n" + fileContentMinified)
 
 	// Chunk string to get top levels functions
+	fmt.Println("Chunking string...")
 	fileContentChunked := alisp.Chunk(fileContentMinified)
-	for _, chunk := range fileContentChunked {
-		fmt.Println("  > Chunk:", chunk)
-	}
+	// for _, chunk := range fileContentChunked {
+	// 	fmt.Println("  > Chunk:", chunk)
+	// }
 
 	// Get rid of functions that are not "DT:*" or "defun" functions
+	fmt.Println("Cleaning unnecesary functions...")
 	chunksCleaned := alisp.CleanChunks(fileContentChunked)
+
+	// Create the array of FileFuncDepen
+	var data []alisp.FuncDepen
+	var structChunk alisp.FuncDepen
 	for _, chunk := range chunksCleaned {
 		fmt.Println("  > Chunk:", chunk)
+
+		structChunk = &alisp.FuncDepen{
+			FunctionName: filePath,
+			Dependencies: []string{"asd", "sdf"},
+		}
+		data = append(data, structChunk)
+	}
+	for i, x := range data {
+		fmt.Print("\n" + string(i) + ": " + x.FunctionName + "  ")
+		fmt.Print(x.Dependencies)
 	}
 	// e := alisp.FuncDepen{
 	// 	FunctionName: "name",
@@ -47,5 +64,4 @@ func main() {
 	// fmt.Println("e:", e)
 	// fmt.Println("e.FunctionName:", e.FunctionName)
 	// fmt.Println("e.Dependencies:", e.Dependencies)
-
 }

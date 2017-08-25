@@ -2,7 +2,7 @@
 (defun function1name ( fun1arg ) function1Content )
 (defun function2name
   ( fun1arg )
-  function2Content
+  (function2Content)
   (defun function3name ( fun1arg ) function3Content )
   (defun function3name ( fun1arg ) function3Content )
   (defun function3name ( fun1arg ) function3Content )
