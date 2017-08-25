@@ -4,6 +4,7 @@ import (
 	"autolisp-analyser/alisp"
 	"fmt"
 	"io/ioutil"
+	"strconv"
 )
 
 // check : error handling function
@@ -42,26 +43,13 @@ func main() {
 	chunksCleaned := alisp.CleanChunks(fileContentChunked)
 
 	// Create the array of FileFuncDepen
-	var data []alisp.FuncDepen
-	var structChunk alisp.FuncDepen
-	for _, chunk := range chunksCleaned {
-		fmt.Println("  > Chunk:", chunk)
-
-		structChunk = &alisp.FuncDepen{
-			FunctionName: filePath,
-			Dependencies: []string{"asd", "sdf"},
-		}
-		data = append(data, structChunk)
+	arrayFileFuncDepen := alisp.StringToFileFuncDepen(chunksCleaned, filePath)
+	fmt.Println("\narrayFileFuncDepen.FilePath:", arrayFileFuncDepen.FilePath)
+	for i, item := range arrayFileFuncDepen.Functions {
+		fmt.Print("Function " + strconv.Itoa(i) + ": ")
+		fmt.Println(item)
+		// fmt.Print(item.FilePath, "\t")
+		// fmt.Print(item.Dependencies, "\t")
+		// fmt.Print(item.FunctionName, "\t")
 	}
-	for i, x := range data {
-		fmt.Print("\n" + string(i) + ": " + x.FunctionName + "  ")
-		fmt.Print(x.Dependencies)
-	}
-	// e := alisp.FuncDepen{
-	// 	FunctionName: "name",
-	// 	Dependencies: []string{"ing", "asd"},
-	// }
-	// fmt.Println("e:", e)
-	// fmt.Println("e.FunctionName:", e.FunctionName)
-	// fmt.Println("e.Dependencies:", e.Dependencies)
 }

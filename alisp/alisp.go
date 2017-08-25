@@ -1,6 +1,7 @@
 package alisp
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -13,20 +14,15 @@ type FuncDepen struct {
 // FileFuncDepen : depencency file struct
 type FileFuncDepen struct {
 	FilePath  string
-	Functions FuncDepen
+	Functions []FuncDepen
 }
 
 // MinifyString : clean unnecessary content from s string
 func MinifyString(s string) string {
-	// fmt.Println("Minifying string:")
 	replacer1 := strings.NewReplacer(
 		"\r\n", "", // remove newlines (in Windows is "\r\n", not "\n")
 		"  ", " ", // remove double spaces
 	)
-	// fmt.Println("  > Removing \"\\n\"...")
-	// fmt.Println("  > Removing double spaces...")
-	newString := replacer1.Replace(s)
-
 	replacer2 := strings.NewReplacer(
 		" )", ")", // remove spaces before "("
 		" (", "(", // remove spaces before ")"
@@ -36,7 +32,7 @@ func MinifyString(s string) string {
 		") ", ")", // remove spaces after ")"
 	)
 
-	// fmt.Println("  > Removing spaces before and after \"(\" and \")\"...")
+	newString := replacer1.Replace(s)
 	newString = replacer2.Replace(newString)
 	newString = replacer3.Replace(newString)
 
@@ -45,27 +41,30 @@ func MinifyString(s string) string {
 
 // Chunk : clean unnecessary content from s string
 func Chunk(s string) []string {
-	// Run through every character within "s" string
+
 	startPoint := 0
 	currentNestedLevel := 0
 	chunkArray := []string{}
+
+	// Run through every character within "s" string
 	for i, x := range s {
 		currentChar := string(x)
+
 		switch currentChar {
 		case "(":
 			if currentNestedLevel == 0 {
 				startPoint = i
 			}
 			currentNestedLevel++
+
 		case ")":
 			currentNestedLevel--
 			if currentNestedLevel == 0 {
 				stringUpToHere := s[startPoint:(i + 1)]
-				// fmt.Println("stringUpToHere:", stringUpToHere)
 				chunkArray = append(chunkArray, stringUpToHere)
-				// fmt.Println("chunkArray:", chunkArray, "\n")
 			}
 		}
+
 	}
 	return chunkArray
 }
@@ -82,4 +81,58 @@ func CleanChunks(chunkArray []string) []string {
 		}
 	}
 	return newChunkArray
+}
+
+// StringToFileFuncDepen : convert string array FileFuncDepen array
+func StringToFileFuncDepen(chunkArray []string, filePath string) FileFuncDepen {
+	fmt.Println("Converting strings into structs...")
+
+	var funcDepenArray []FuncDepen
+	var fileFuncDepenArray FileFuncDepen
+	var tempFuncDepen FuncDepen
+	var functionName string
+	var stopCopying bool
+
+	for _, x := range chunkArray {
+		stopCopying = false // reset stopCopying
+		functionName = ""   // reset functionName
+
+		// if chunk starts with "(defun "
+		if x[0:7] == "(defun " {
+			for _, ch := range x[7:] { // get from 7th character on until you find "(" or " "
+				if ch == '(' || ch == ' ' {
+					stopCopying = true
+				}
+				if stopCopying == false {
+					functionName = functionName + string(ch)
+				}
+			}
+			tempFuncDepen = FuncDepen{
+				FunctionName: functionName,
+				Dependencies: []string{"dep1", "dep2"},
+			}
+			funcDepenArray = append(funcDepenArray, tempFuncDepen)
+		} else if x[0:4] == "(DT:" { // get from 4th character on until you find "(" or " "
+			functionName = "(DT:"
+			for _, ch := range x[4:] {
+				if ch == '(' || ch == ' ' {
+					stopCopying = true
+				}
+				if stopCopying == false {
+					functionName = functionName + string(ch)
+				}
+			}
+			tempFuncDepen = FuncDepen{
+				FunctionName: functionName,
+				Dependencies: []string{"dep1", "dep2"},
+			}
+			funcDepenArray = append(funcDepenArray, tempFuncDepen)
+		}
+
+		fileFuncDepenArray = FileFuncDepen{
+			FilePath:  filePath,
+			Functions: funcDepenArray,
+		}
+	}
+	return fileFuncDepenArray
 }
