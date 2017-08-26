@@ -19,22 +19,23 @@ type FileFuncDepen struct {
 
 // MinifyString : clean unnecessary content from s string
 func MinifyString(s string) string {
-	replacer1 := strings.NewReplacer(
-		"\r\n", "", // remove newlines (in Windows is "\r\n", not "\n")
-		"  ", " ", // remove double spaces
-	)
-	replacer2 := strings.NewReplacer(
-		" )", ")", // remove spaces before "("
-		" (", "(", // remove spaces before ")"
-	)
-	replacer3 := strings.NewReplacer(
-		"( ", "(", // remove spaces after "("
-		") ", ")", // remove spaces after ")"
-	)
 
-	newString := replacer1.Replace(s)
-	newString = replacer2.Replace(newString)
-	newString = replacer3.Replace(newString)
+	patternArray := [][]string{
+		{"\r\n", ""}, // newlines (Windows)
+		{"\n", ""},   // newlines
+		{"  ", ""},   // double spaces
+		{" (", "("},  // spaces before "("
+		{" )", ")"},  // spaces before ")"
+		{"( ", "("},  // spaces after "("
+		{") ", ")"},  // spaces after ")"
+	}
+
+	newString := s
+
+	for i := range patternArray {
+		replacer := strings.NewReplacer(patternArray[i][0], patternArray[i][1])
+		newString = replacer.Replace(newString)
+	}
 
 	return newString
 }
