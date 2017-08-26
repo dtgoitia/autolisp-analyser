@@ -40,7 +40,7 @@ func MinifyString(s string) string {
 	return newString
 }
 
-// Chunk : clean unnecessary content from s string
+// Chunk : split string in chunks
 func Chunk(s string) []string {
 
 	startPoint := 0
