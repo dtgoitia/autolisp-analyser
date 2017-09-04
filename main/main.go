@@ -42,13 +42,18 @@ func main() {
 	fmt.Println("Cleaning unnecesary functions...")
 	chunksCleaned := alisp.CleanChunks(fileContentChunked)
 
-	// Create the array of FileFuncDepen
+	// Get a FileFuncDepen struct, which contains the path of the file analysed
+	// and an array of FuncDepen strcuts, each of which contain the name of the
+	// function and the name of the dependencies
 	arrayFileFuncDepen := alisp.StringToFileFuncDepen(chunksCleaned, filePath)
-	fmt.Println("\narrayFileFuncDepen.FilePath:", arrayFileFuncDepen.FilePath)
+	fmt.Println("\nAnalysing file \"" + arrayFileFuncDepen.FilePath + "\":")
 	for i, item := range arrayFileFuncDepen.Functions {
 		fmt.Print("Function " + strconv.Itoa(i) + ": ")
-		fmt.Println(item)
-		// fmt.Print(item.FilePath, "\t")
+		fmt.Println(item.FunctionName)
+		for ii, dep := range item.Dependencies {
+			fmt.Print("   Dep. " + strconv.Itoa(i) + "." + strconv.Itoa(ii) + ": ")
+			fmt.Println(dep)
+		}
 		// fmt.Print(item.Dependencies, "\t")
 		// fmt.Print(item.FunctionName, "\t")
 	}
