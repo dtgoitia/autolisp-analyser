@@ -124,8 +124,8 @@ func StringToFileFuncDepen(chunkArray []string, filePath string) FileFuncDepen {
 				}
 			}
 			tempFuncDepen = FuncDepen{
-				FunctionName: functionName,
-				Dependencies: []string{"dep1", "dep2"},
+				FunctionName: functionName + ")",
+				Dependencies: []string{"this is dep 1", "this is dep dep2"},
 			}
 			funcDepenArray = append(funcDepenArray, tempFuncDepen)
 		}
